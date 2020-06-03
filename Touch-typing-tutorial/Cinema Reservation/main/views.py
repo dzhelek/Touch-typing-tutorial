@@ -7,6 +7,7 @@ from .utils import validate_email, validate_password
 
 from tabulate import tabulate
 from termcolor import colored
+import urwid
 
 
 def clear_screen():
@@ -21,10 +22,38 @@ def system_input(text, secret=False):
     return inputing(colored(f'{text}: ', INPUT_COLOR))
 
 
+class Menu:
+    def __init__(self, title, choices):
+        self.choices = choices
+        self.title = title
+        self.main = urwid.Padding(self.menu(), left=2, right=2)
+        top = urwid.Overlay(self.main, urwid.SolidFill(u'\N{MEDIUM SHADE}'),
+                            align='center', width=('relative', 60),
+                            valign='middle', height=('relative', 60),
+                            min_width=20, min_height=9)
+        urwid.MainLoop(top, palette=[('reversed', 'standout', '')]).run()
+
+    def menu(self):
+        body = [urwid.Text(self.title), urwid.Divider()]
+        for c in self.choices:
+            button = urwid.Button(c)
+            urwid.connect_signal(button, 'click', self.item_chosen, c)
+            body.append(urwid.AttrMap(button, None, focus_map='reversed'))
+        return urwid.ListBox(urwid.SimpleFocusListWalker(body))
+
+    def item_chosen(self, button, choice):
+        self.command = choice
+
+        raise urwid.ExitMainLoop()
+
+    def exit_program(self, button):
+        raise SystemExit
+
+
 class UserViews:
     def console_read_command_view(self):
-        command = input('> ')
-        return command
+        menu = Menu('wellcome', ['login', 'signup'])
+        return menu.command
 
     def guest_user_help_view(self):
         print('\nlist of commands:\n')
