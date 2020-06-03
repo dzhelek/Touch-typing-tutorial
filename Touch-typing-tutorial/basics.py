@@ -3,6 +3,33 @@ import subprocess
 from getpass import getpass
 from termcolor import colored
 from help_library import get_character
+import os
+
+
+RIGHT_HAND = '''
+   _.-._
+  | | | |_
+  | | | | |
+  | | | | |
+_ |  '-._ |
+\`\`-.'-._;
+ \    '   |
+  \  .`  /
+   |    |
+'''
+
+LEFT_HAND = '''
+    _.-._
+  _| | | |
+ | | | | |
+ | | | | |
+ | _.-'  | _
+ ;_.-'.-`/`/
+ |   '    /
+ \  `.  /
+  |    |
+'''
+
 
 mapper = {'a': ((1, 1), 0)}
 
@@ -25,17 +52,26 @@ def exit_on_q(key):
     if key in ('q', 'Q'):
         raise urwid.ExitMainLoop()
 
+def welcome():
+    clear_screen()
+    print(colored('----- Tutorial -----'.center(os.get_terminal_size().columns), 'blue'))
+    print('\n\n\n')
+
+
+def print_hands(left_hand=LEFT_HAND, right_hand=RIGHT_HAND):
+    strings=[left_hand, right_hand]
+    print(*['                                        '.join(x).center(os.get_terminal_size().columns) for x in zip(*[[x.ljust(len(max(s.split('\n'), key=len))) for x in s.split('\n')] for s in strings])], sep='\n')
+
+
+def print_screen(text):
+    welcome()
+    print(text.center(os.get_terminal_size().columns))
+    print('\n\n\n')
+    print_hands()
 
 if __name__ == '__main__':
-    palette = [
-    ('banner', '', '', '', '#ffa', '#60d'),
-    ('streak', '', '', '', 'g50', '#60a'),
-    ('inside', '', '', '', 'g38', '#808'),
-    ('outside', '', '', '', 'g27', '#a06'),
-    ('bg', '', '', '', 'g7', '#d06'),]
-
-    clear_screen()
-    print(text)
+    print_screen(text)
+    cols = os.get_terminal_size().columns
     current_position = 0
     is_tutorial_finished = False
     all_pressed = []
@@ -44,11 +80,11 @@ if __name__ == '__main__':
         pressed = pressed.lower()
         if pressed == text[current_position]:
             current_position += 1
-            clear_screen()
+            
             if pressed == ' ':
                 text = text[:current_position - 1] + '_' + text[current_position:]
-            print(colored(text[0:current_position], 'green') + text[current_position:])
-
+            text_for_print = ((colored(text[0:current_position], 'green') + text[current_position:]).center(os.get_terminal_size().columns))
+            print_screen(text_for_print)
             if current_position == len(text):
                 is_tutorial_finished = True
         all_pressed.append(pressed)
