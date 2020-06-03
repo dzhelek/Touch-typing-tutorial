@@ -4,8 +4,7 @@ from getpass import getpass
 from termcolor import colored
 from help_library import get_character
 import os
-from time import sleep
-
+import time
 
 RIGHT_HAND = '''
 
@@ -89,6 +88,7 @@ def print_screen(text):
 
 
 def process_tutorial(tutorial_text):
+    start = time.time()
     print_screen(tutorial_text)
     current_position = 0
     is_tutorial_finished = False
@@ -108,15 +108,16 @@ def process_tutorial(tutorial_text):
                 is_tutorial_finished = True
         print_screen(text_for_print)
         all_pressed.append(pressed)
-    print(all_pressed)
+    end = time.time()
+    clear_screen()
+    print(colored('Tutorial completed in ' + "%.2f" % (end - start) +'s', 'blue').center(os.get_terminal_size().columns))
 
 
 if __name__ == '__main__':
     process_tutorial('aa aa')
-    clear_screen()
-    print(colored('Tutorial completed', 'blue').center(os.get_terminal_size().columns))
-    sleep(2)
+    time.sleep(2)
     process_tutorial('bb bb')
+    time.sleep(2)
 
 
 # palette = [
