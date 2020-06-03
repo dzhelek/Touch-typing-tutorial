@@ -4,9 +4,11 @@ from getpass import getpass
 from termcolor import colored
 from help_library import get_character
 import os
+from time import sleep
 
 
 RIGHT_HAND = '''
+
    _.-._
   | | | |_
   | | | | |
@@ -16,9 +18,11 @@ _ |  '-._ |
  \    '   |
   \  .`  /
    |    |
+   |    |
 '''
 
 LEFT_HAND = '''
+
     _.-._
   _| | | |
  | | | | |
@@ -27,6 +31,7 @@ LEFT_HAND = '''
  ;_.-'.-`/`/
  |   '    /
  \  `.  /
+  |    |
   |    |
 '''
 
@@ -46,7 +51,7 @@ KEYBOARD = '''
 
 mapper = {'a': ((1, 1), 0)}
 
-text = 'aa aa aa'
+text = 'aaaa'
 
 
 def clear_screen():
@@ -82,26 +87,37 @@ def print_screen(text):
     print('\n\n')
     print_hands_with_console()
 
-if __name__ == '__main__':
-    print_screen(text)
-    cols = os.get_terminal_size().columns
+
+def process_tutorial(tutorial_text):
+    print_screen(tutorial_text)
     current_position = 0
     is_tutorial_finished = False
     all_pressed = []
+    text_for_print = tutorial_text
     while not is_tutorial_finished:
         pressed = str(get_character())[2]
         pressed = pressed.lower()
-        if pressed == text[current_position]:
+        if pressed == tutorial_text[current_position]:
             current_position += 1
-            
+
             if pressed == ' ':
-                text = text[:current_position - 1] + '_' + text[current_position:]
-            text_for_print = ((colored(text[0:current_position], 'green') + text[current_position:]).center(os.get_terminal_size().columns))
-            print_screen(text_for_print)
-            if current_position == len(text):
+                tutorial_text = tutorial_text[:current_position - 1] + '_' + tutorial_text[current_position:]
+            text_for_print = colored(tutorial_text[:current_position], 'green') + tutorial_text[current_position:]
+
+            if current_position == len(tutorial_text):
                 is_tutorial_finished = True
+        print_screen(text_for_print)
         all_pressed.append(pressed)
     print(all_pressed)
+
+
+if __name__ == '__main__':
+    process_tutorial('aa aa')
+    clear_screen()
+    print(colored('Tutorial completed', 'blue').center(os.get_terminal_size().columns))
+    sleep(2)
+    process_tutorial('bb bb')
+
 
 # palette = [
 #     ('banner', '', '', '', '#ffa', '#184'),
