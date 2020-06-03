@@ -5,6 +5,7 @@ from termcolor import colored
 from help_library import get_character
 import os
 import time
+from utils import calculate_words_per_minute
 
 RIGHT_HAND = '''
 
@@ -111,7 +112,8 @@ def process_tutorial(tutorial_text):
     end = time.time()
     clear_screen()
     print(colored('Tutorial completed in ' + "%.2f" % (end - start) +'s', 'blue').center(os.get_terminal_size().columns))
-
+    words_per_minute = calculate_words_per_minute(tutorial_text, end - start)
+    print(colored(f'{words_per_minute}wpm', 'blue').center(os.get_terminal_size().columns))
 
 if __name__ == '__main__':
     process_tutorial('aa aa')
