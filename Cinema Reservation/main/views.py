@@ -38,11 +38,11 @@ class UserViews:
         command = input('> ')
         return command
 
-    def guest_user_help_view(self):
-        print('\nlist of commands:\n')
-        print(colored('exit\nhelp\n', COLOR_IN_EXIT))
-        print(colored('''login
-signup''', COMMAND_COLOR))
+#     def guest_user_help_view(self):
+#         print('\nlist of commands:\n')
+#         print(colored('exit\nhelp\n', COLOR_IN_EXIT))
+#         print(colored('''login
+# signup''', COMMAND_COLOR))
 
     def error_view(self, error):
         print(error)
@@ -57,6 +57,16 @@ signup''', COMMAND_COLOR))
 show movie projections <movie_id> [<date>]
 show movies''', COMMAND_COLOR))
 
+    def validation_input(self, validator, message, secret=False):
+        while True:
+            try:
+                result = system_input(message, secret)
+                validator(result)
+            except ValueError as err:
+                self.error_view(err)
+            else:
+                return result
+
     def login(self):
         print('----- LOG IN -----')
         username = system_input('Username')
@@ -64,20 +74,19 @@ show movies''', COMMAND_COLOR))
         return username, password
 
     def signup(self):
-        print('----- SIGH UP -----')
-        try:
-            username = system_input('Username')
-            email = system_input('Email')
-            validate_email(email)
-            password = system_input('Password', secret=True)
-            validate_password(password)
-            confirm = system_input('Confirm password', secret=True)
+        print('----- SIGN UP -----')
+        username = system_input('Username')
+        email = self.validation_input(validate_email, 'Email')
+        password = self.validation_input(validate_password,
+                                         'Password', secret=True)
+
+        def validate_equal(confirm):
             if confirm != password:
                 raise ValueError('password is not the same')
-        except ValueError as err:
-            return err
-        else:
-            return username, email, password
+
+        self.validation_input(validate_equal, 'Confirm password', secret=True)
+
+        return username, email, password
 
     def exit(self, username='guest'):
         print(colored(f'Goodbye, {username}!', COLOR_IN_EXIT, attrs=['bold']))

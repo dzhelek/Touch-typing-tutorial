@@ -1,6 +1,7 @@
 from .controllers import UserController, TextController, TutorialController, SpeedTestController
 from .models import User
 from .views import (UserViews, TutorialViews, SpeedTestViews, system_input)
+from .urwid_views import Menu
 from views_constants import PROJECTION_SEATS
 from sqlalchemy.exc import IntegrityError
 import re
@@ -19,22 +20,17 @@ class ViewControllerManager:
         self.speedtest_controllers = SpeedTestController()
 
     def manage_entering_system_views_and_controllers(self):
-        is_system_entered = False
         user_entered_system = None
-        while not is_system_entered:
-            command = self.user_views.console_read_command_view()
-            if command == 'help':
-                self.user_views.guest_user_help_view()
-            elif command == 'login':
-                user_entered_system = self.manage_login_view_and_controller()
-            elif command == 'signup':
-                user_entered_system = self.manage_signup_view_and_controller()
-            elif command == 'exit':
-                raise SystemExit
-            else:
-                print(f'\'{command}\' command not found')
-            if user_entered_system is not None:
-                is_system_entered = True
+        menu = Menu('welcome', ['login', 'signup', 'exit'])
+        command = menu.command
+        if command == 'login':
+            user_entered_system = self.manage_login_view_and_controller()
+        elif command == 'signup':
+            user_entered_system = self.manage_signup_view_and_controller()
+        elif command == 'exit':
+            raise SystemExit
+        else:
+            raise ValueError
 
         return user_entered_system
 
@@ -179,6 +175,6 @@ class ViewControllerManager:
 
     def release_resources(self):
         self.user_controllers.gateway.db.close()
-        self.movie_controllers.gateway.db.close()
-        self.projection_controllers.gateway.db.close()
-        self.reservation_controllers.gateway.db.close()
+        self.text_controllers.gateway.db.close()
+        self.tutorial_controllers.gateway.db.close()
+        self.speedtest_controllers.gateway.db.close()
