@@ -94,6 +94,9 @@ class ViewControllerManager:
                 count += 1
             self.speedtest_controllers.add_speedtest(user.id, text.id, text.words / 10 * 60, datetime.now())
 
+    def get_speedtests_with_best_score(self, user_id, count):
+        return self.speedtest_controllers.get_speedtests_with_best_score_for_user(user_id, count)
+
     def read_input_for_reservation(self, input_message, error_message):
         is_correct_data_entered = False
         data_for_reservation = 0

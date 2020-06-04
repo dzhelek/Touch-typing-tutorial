@@ -61,6 +61,9 @@ class SpeedTestController:
     def add_speedtest(self, user_id, text_id, words_per_minute, when):
         self.gateway.update_table_with_speedtest_data(user_id, text_id, words_per_minute, when)
 
+    def get_speedtests_with_best_score_for_user(self, user_id, count=1):
+        return self.gateway.select_speedtests_for_user_ordered_by_words_per_minute(user_id, count)
+
 
 class TutorialController:
     def __init__(self):
