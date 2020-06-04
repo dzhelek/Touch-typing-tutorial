@@ -1,53 +1,27 @@
-import urwid
-import subprocess
-from getpass import getpass
-from termcolor import colored
 from help_library import get_character
-import os
-import time
 from utils import calculate_words_per_minute
 
+from getpass import getpass
+import os
+import subprocess
+from textwrap import wrap
+import time
 
-RIGHT_HAND = '''
+from termcolor import colored
+import urwid
 
-   _.-._
-  | | | |_
-  | | | | |
-  | | | | |
-_ |  '-._ |
-\`\`-.'-._;
- \    '   |
-  \  .`  /
-   |    |
-   |    |
-'''
-
-LEFT_HAND = '''
-
-    _.-._
-  _| | | |
- | | | | |
- | | | | |
- | _.-'  | _
- ;_.-'.-`/`/
- |   '    /
- \  `.  /
-  |    |
-  |    |
-'''
-
-KEYBOARD = '''
-,---,---,---,---,---,---,---,---,---,---,---,---,---,-------,
-| ` | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0 | - | + | <---- |
-|---'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-----|
-| ->| | Q | W | E | R | T | Y | U | I | O | P | [ | ] |  \  |
-|-----',--',--',--',--',--',--',--',--',--',--',--',--'-----|
-| Caps | A | S | D | F | G | H | J | K | L | ; | ' | Enter  |
-|------'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'--------|
-| Shift  | Z | X | C | V | B | N | M | , | . | ? |  Shift   |
-|------,-',--'--,'---'---'---'---'---'---'-,-'---',--,------|
-| ctrl |  | alt |                          |altgr |  | ctrl |
-'------'  '-----'--------------------------'------'  '------'
+BOARD = r'''
+            ,---,---,---,---,---,---,---,---,---,---,---,---,---,-------,             .
+   _.-._       | ` | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0 | - | + | <---- |       _.-._   
+ _| | | |      |---'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-----|      | | | |_ 
+| | | | |      | ->| | Q | W | E | R | T | Y | U | I | O | P | [ | ] |  \  |      | | | | |
+| | | | |      |-----',--',--',--',--',--',--',--',--',--',--',--',--'-----|      | | | | |
+| _.-'  | _    | Caps | A | S | D | F | G | H | J | K | L | ; | ' | Enter  |    _ |  '-._ |
+;_.-'.-`/`/    |------'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'--------|    \`\`-.'-._;
+|   '    /     | Shift  | Z | X | C | V | B | N | M | , | . | ? |  Shift   |     \    '   |
+\  `.  /       |------,-',--'--,'---'---'---'---'---'---'-,-'---',--,------|      \  .`  / 
+ |    |        | ctrl |  | alt |                          |altgr |  | ctrl |       |    |  
+ |    |        '------'  '-----'--------------------------'------'  '------'       |    |  
 '''
 
 mapper = {'a': ((1, 1), 0)}
@@ -79,18 +53,20 @@ def welcome():
     print('\n\n')
 
 
-def print_hands_with_console(left_hand=LEFT_HAND, keyboard=KEYBOARD,
-                             right_hand=RIGHT_HAND):
-    strings = [left_hand, keyboard, right_hand]
-    print(*['    '
-            .join(x).center(os.get_terminal_size().columns) for x in zip(*[[x.ljust(len(max(s.split('\n'), key=len))) for x in s.split('\n')] for s in strings])], sep='\n')
+# def print_hands_with_console(left_hand=LEFT_HAND, keyboard=KEYBOARD,
+#                              right_hand=RIGHT_HAND):
+#     strings = [left_hand, keyboard, right_hand]
+#     print(*['    '
+#             .join(x).center(os.get_terminal_size().columns) for x in zip(*[[x.ljust(len(max(s.split('\n'), key=len))) for x in s.split('\n')] for s in strings])], sep='\n')
 
 
 def print_screen(text):
     welcome()
     print(text.center(os.get_terminal_size().columns))
     print('\n\n')
-    print_hands_with_console()
+    for line in wrap(BOARD, width=91):
+        print(line.center(os.get_terminal_size().columns))
+    # print(BOARD.center(terminal_size))
 
 
 def process_tutorial(tutorial_text):
