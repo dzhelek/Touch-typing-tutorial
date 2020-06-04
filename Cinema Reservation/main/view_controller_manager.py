@@ -35,13 +35,15 @@ class ViewControllerManager:
         return user_entered_system
 
     def manage_login_view_and_controller(self):
-        login_data = self.user_views.login()
-        username_entered = login_data[0]
-        password_entered = login_data[1]
-        try:
-            return self.user_controllers.log_user(username_entered, password_entered)
-        except ValueError as err:
-            self.user_views.error_view(str(err))
+        while True:
+            login_data = self.user_views.login()
+            username_entered = login_data[0]
+            password_entered = login_data[1]
+            try:
+                return self.user_controllers.log_user(username_entered,
+                                                      password_entered)
+            except ValueError as err:
+                self.user_views.error_view(str(err))
 
     def start_tutorial(self, user):
         # while not is_correct_data_entered:
@@ -106,51 +108,19 @@ class ViewControllerManager:
         return data_for_reservation
 
     def manage_user_commands_views_and_controllers(self, user):
-        self.user_views.welcome_user(user)
-        while True:
-            command = self.user_views.console_read_command_view()
-            if command == 'help':
-                self.user_views.logged_user_help_view()
-            elif command == 'show movies':
-                self.show_movies()
-            elif command.startswith('show movie projections'):
-                entered_data =\
-                    command.replace('show movie projections', '').split()
-                if len(entered_data) == 2:
-                    date = entered_data[1]
-                else:
-                    date = ''
-                if len(entered_data) == 0:
-                    print('please specifie movie_id (and date)')
-                else:
-                    movie = entered_data[0]
-                    try:
-                        self.show_movie_projections(movie, date)
-                    except Exception as e:
-                        print(str(e))
-                        raise
-            elif command == 'make reservation':
-                try:
-                    self.reservation_views.index()
-                    seats = self.read_input_for_reservation('number of seats', 'Seats need to be number in range 1-10')
-                    # print(f'Seats: {seats}')
-                    self.show_movies()
-                    movie_id = self.read_input_for_reservation('movie id', 'Movie id needs to be a number')
-                    # print(f'Movie id: {movie}')
-                    self.show_movie_projections(movie_id)
-                    projection_id = self.read_input_for_reservation('projection id', 'Projection id needs to be a number')
-                    projection_used_seats = self.reservation_controllers.count_used_seats(projection_id)
-                    if PROJECTION_SEATS - projection_used_seats[0] >= seats:
-                        print(f'You can reserve {seats} seats')
-                    else:
-                        print(f'There aren`t {seats} available seats')
-                except SystemExit:
-                    print('\nProcess canceled!')
-
-            elif command == 'exit':
-                raise SystemExit
-            else:
-                print(f'\'{command}\' command not found')
+        menu = Menu(f'welcome, {user.username}',
+                    ['tutorial', 'speedtest', 'statistics', 'exit'])
+        command = menu.command
+        if command == 'tutorial':
+            pass
+        elif command == 'speedtest':
+            pass
+        elif command == 'statistics':
+            pass
+        elif command == 'exit':
+            raise SystemExit
+        else:
+            raise ValueError
 
     def manage_signup_view_and_controller(self):
         signup_data = self.user_views.signup()
