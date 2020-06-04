@@ -1,6 +1,7 @@
 from .utils import get_hash, get_hashed_pass_and_salt
 from .gateway import UserGateway, TextGateway, SpeedTestGateway, TutorialGateway
 from .models import User
+import random
 
 
 class UserController:
@@ -32,19 +33,25 @@ class UserController:
         self.gateway.db.commit()
 
 
-
 class TextController:
     def __init__(self):
         self.gateway = TextGateway()
 
     def search_text_by_id(self, id):
-        return self.gateway.search_text_by_id(id)
+        return self.gateway.select_text_by_id(id)
 
     def get_all_texts(self):
         return self.gateway.select_all_texts()
 
     def add_text(self, text_content):
         self.gateway.update_table_with_text_data(text_content)
+
+    def get_random_text(self, previous_text_id=None):
+        all_texts = self.get_all_texts()
+        if previous_text_id:
+            previous_text = self.search_text_by_id(previous_text_id)
+            all_texts.remove(previous_text)
+        return random.choice(all_texts)
 
 
 class SpeedTestController:

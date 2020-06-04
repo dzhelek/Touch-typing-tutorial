@@ -64,9 +64,10 @@ class ViewControllerManager:
         is_playing_finished = False
         while not is_playing_finished:
             tutorial = self.tutorial_controllers.get_tutorial_for_user(user.next_tutorial_order_id)
+            # TODO:
+            # call start_tutorial view instead of print()
             print(tutorial.content)
-            #TODO
-            #play tutorial
+
             if tutorial.order_id < tutorials_count:
                 self.user_controllers.increment_user_next_tutorial_order_id(user)
             else:
@@ -74,13 +75,21 @@ class ViewControllerManager:
                 print('Svurshiha tutorialite')
                 is_playing_finished = True
 
-    # def show_movies(self):
-    #     all_movies = self.movie_controllers.show_movies()
-    #     self.movie_views.show_all_view(all_movies)
+    def start_speedtest(self, user):
+        is_playing_finished = False
+        count = 0 #TODO remove this count
+        previous_text_id = None
+        while not is_playing_finished:
+            text = self.text_controllers.get_random_text(previous_text_id)
+            # TODO:
+            # call start_speedtest view instead of print()
+            print(text.content)
 
-    # def show_movie_projections(self, movie, date=''):
-    #     projections = self.projection_controllers.show_projection(movie, date)
-    #     self.projection_views.show_all_projections(projections)
+            if count > 4: #TODO check if process is canceled by user
+                is_playing_finished = True
+            else:
+                previous_text_id = text.id
+                count += 1
 
     def read_input_for_reservation(self, input_message, error_message):
         is_correct_data_entered = False
