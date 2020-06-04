@@ -18,7 +18,7 @@ def start():
         # speedtests = manager.get_speedtests_with_best_score(user.id, 10)
         # for speedtest in speedtests:
         #     print(str(speedtest.words_per_minute) + '---' + str(speedtest.when))
-        manager.start_tutorial(user)
+        manager.start_speedtest(user)
         # user = manager.manage_entering_system_views_and_controllers()
         # manager.manage_user_commands_views_and_controllers(user)
     except SystemExit:

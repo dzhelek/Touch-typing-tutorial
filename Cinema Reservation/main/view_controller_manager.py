@@ -1,6 +1,6 @@
 from .controllers import UserController, TextController, TutorialController, SpeedTestController
 from .models import User
-from .views import (UserViews, TutorialViews, system_input)
+from .views import (UserViews, TutorialViews, SpeedTestViews, system_input)
 from views_constants import PROJECTION_SEATS
 from sqlalchemy.exc import IntegrityError
 import re
@@ -15,6 +15,7 @@ class ViewControllerManager:
         self.text_controllers = TextController()
         self.tutorial_views = TutorialViews()
         self.tutorial_controllers = TutorialController()
+        self.speedtest_views = SpeedTestViews()
         self.speedtest_controllers = SpeedTestController()
 
     def manage_entering_system_views_and_controllers(self):
@@ -72,7 +73,6 @@ class ViewControllerManager:
                 is_playing_finished = True
         self.tutorial_views.finished_all_tutorials()
 
-
     def start_speedtest(self, user):
         is_playing_finished = False
         count = 0 #TODO remove this count
@@ -81,7 +81,9 @@ class ViewControllerManager:
             text = self.text_controllers.get_random_text(previous_text_id)
             # TODO:
             # call start_speedtest view instead of print()
-            print(text.content)
+            time_for_completion = self.speedtest_views.process_speedtest(text.content)
+            words_per_minute = calculate_words_per_minute(text.words, time_for_completion)
+            self.speedtest_views.result_from_speedtest(time_for_completion, words_per_minute)
 
             if count > 4: #TODO check if process is canceled by user
                 is_playing_finished = True
