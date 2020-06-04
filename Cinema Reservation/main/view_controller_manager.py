@@ -1,10 +1,11 @@
-from .controllers import UserController, TextController, TutorialController
+from .controllers import UserController, TextController, TutorialController, SpeedTestController
 from .models import User
 from .views import (UserViews, MovieViews, ProjectionViews,
                    ReservationViews, system_input)
 from views_constants import PROJECTION_SEATS
 from sqlalchemy.exc import IntegrityError
 import re
+from datetime import datetime
 
 
 class ViewControllerManager:
@@ -13,6 +14,7 @@ class ViewControllerManager:
         self.user_controllers = UserController()
         self.text_controllers = TextController()
         self.tutorial_controllers = TutorialController()
+        self.speedtest_controllers = SpeedTestController()
         # self.movie_views = MovieViews()
         # self.movie_controllers = MovieController()
         # self.projection_views = ProjectionViews()
@@ -90,6 +92,7 @@ class ViewControllerManager:
             else:
                 previous_text_id = text.id
                 count += 1
+            self.speedtest_controllers.add_speedtest(user.id, text.id, text.words / 10 * 60, datetime.now())
 
     def read_input_for_reservation(self, input_message, error_message):
         is_correct_data_entered = False

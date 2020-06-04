@@ -58,6 +58,9 @@ class SpeedTestController:
     def __init__(self):
         self.gateway = SpeedTestGateway()
 
+    def add_speedtest(self, user_id, text_id, words_per_minute, when):
+        self.gateway.update_table_with_speedtest_data(user_id, text_id, words_per_minute, when)
+
 
 class TutorialController:
     def __init__(self):

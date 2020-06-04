@@ -1,5 +1,5 @@
 from sqlalchemy import (Column, Integer, String, Boolean,
-                        Float, ForeignKey, Date, Time,
+                        Float, ForeignKey, DateTime,
                         CheckConstraint)
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -37,6 +37,11 @@ class Text(Base):
     id = Column(Integer, primary_key=True)
     content = Column(String, unique=True)
 
+    @property
+    def words(self):
+        return len(self.content.split(' '))
+
+
 
 class SpeedTest(Base):
     __tablename__ = 'speedtest'
@@ -45,6 +50,8 @@ class SpeedTest(Base):
     user = relationship(User, backref='speedtests')
     text_id = Column(Integer, ForeignKey(Text.id))
     text = relationship(Text, backref='speedtests')
+    words_per_minute = Column(Float)
+    when = Column(DateTime)
 
 
 # class Movie(Base):

@@ -1,4 +1,4 @@
-from .models import User, Text, Tutorial
+from .models import User, Text, Tutorial, SpeedTest
 from .database import Database
 from .utils import get_datetime_object, get_time_object
 from sqlalchemy import func
@@ -50,6 +50,9 @@ class TextGateway:
 class SpeedTestGateway:
     def __init__(self):
         self.db = Database()
+
+    def update_table_with_speedtest_data(self, user_id, text_id, words_per_minute, when):
+        self.db.add(SpeedTest(user_id=user_id, text_id=text_id, words_per_minute=words_per_minute, when=when))
 
 
 class TutorialGateway:
