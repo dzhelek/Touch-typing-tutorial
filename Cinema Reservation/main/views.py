@@ -3,22 +3,34 @@ import subprocess
 
 from .models import User
 from views_constants import *
-from .utils import validate_email, validate_password
+from .utils import validate_email, validate_password, clear_screen, system_input
 
 from tabulate import tabulate
 from termcolor import colored
 
+from .constants import (LEFT_HAND, KEYBOARD, RIGHT_HAND, ALL_TUTORIALS_FINISHED_TEXT,
+                        TUTORIAL_WELCOME_TEXT, SPEEDTEST_WELCOME_TEXT)
+import os
+import time
+from .help_library import get_character
 
-def clear_screen():
-    subprocess.call('clear')
+
+def welcome(welcome_text):
+    clear_screen()
+    print(colored(welcome_text.center(os.get_terminal_size().columns), 'blue'))
+    print('\n\n')
 
 
-def system_input(text, secret=False):
-    if secret:
-        inputing = getpass
-    else:
-        inputing = input
-    return inputing(colored(f'{text}: ', INPUT_COLOR))
+def print_hands_with_console():
+    strings = [LEFT_HAND, KEYBOARD, RIGHT_HAND]
+    print(*['    '.join(x).center(os.get_terminal_size().columns) for x in zip(*[[x.ljust(len(max(s.split('\n'), key=len))) for x in s.split('\n')] for s in strings])], sep='\n')
+
+
+def print_screen(text, title):
+    welcome(title)
+    print(text.center(os.get_terminal_size().columns))
+    print('\n\n')
+    print_hands_with_console()
 
 
 class UserViews:
@@ -80,33 +92,74 @@ show movies''', COMMAND_COLOR))
         print(colored(f'Goodbye, {username}!', COLOR_IN_EXIT, attrs=['bold']))
 
 
-class MovieViews:
-    def show_all_view(self, movies):
-        table = []
-        print()
-        for movie in movies:
-            table.append([colored(movie.id, ID_COLOR),
-                          movie.name, movie.rating])
-        print(tabulate(table,
-                       headers=[colored('id', ID_COLOR), 'name', 'rating']))
+class TutorialViews:
+    def process_tutorial(self, tutorial_text):
+        start = time.time()
+        print_screen(tutorial_text, title=TUTORIAL_WELCOME_TEXT)
+        current_position = 0
+        is_tutorial_finished = False
+        all_pressed = []
+        text_for_print = tutorial_text
+        while not is_tutorial_finished:
+            pressed = str(get_character())[2]
+            pressed = pressed.lower()
+            if pressed == tutorial_text[current_position]:
+                current_position += 1
+
+                if pressed == ' ':
+                    tutorial_text = tutorial_text[:current_position - 1] + '_' + tutorial_text[current_position:]
+                text_for_print = colored(tutorial_text[:current_position], 'green') + tutorial_text[current_position:]
+
+                if current_position == len(tutorial_text):
+                    is_tutorial_finished = True
+            print_screen(text_for_print)
+            all_pressed.append(pressed)
+        end = time.time()
+        return end - start
+
+    def result_from_tutorial(self, time_for_completion, words_per_minute):
+        clear_screen()
+        print(colored('Tutorial completed in ' + "%.2f" % time_for_completion +'s', 'blue').center(os.get_terminal_size().columns))
+        print(colored(f'{words_per_minute}wpm', 'blue').center(os.get_terminal_size().columns))
+        time.sleep(2)
+
+    def finished_all_tutorials(self):
+        print_screen(ALL_TUTORIALS_FINISHED_TEXT)
 
 
-class ProjectionViews:
-    def show_all_projections(self, projections):
-        print()
-        if projections == []:
-            print('No projections available')
-        else:
-            table = []
-            for projection in projections:
-                table.append([colored(projection.id, ID_COLOR),
-                              projection.type, projection.date,
-                              projection.time])
-            print(tabulate(table, headers=[colored('id', ID_COLOR),
-                                           'type', 'date', 'time']))
+class SpeedTestViews:
+    def process_speedtest(self, speedtest_text):
+        start = time.time()
+        print_screen(speedtest_text, SPEEDTEST_WELCOME_TEXT)
+        current_position = 0
+        is_speed_test_finished = False
+        all_pressed = []
+        text_for_print = speedtest_text
+        while not is_speed_test_finished:
+            pressed = str(get_character())[2]
+            if pressed == speedtest_text[current_position]:
+                current_position += 1
 
+                if pressed == ' ':
+                    speedtest_text = speedtest_text[:current_position - 1] + '_' + speedtest_text[current_position:]
+                text_for_print = colored(speedtest_text[:current_position], 'green') + speedtest_text[current_position:]
 
-class ReservationViews:
-    def index(self):
-        print('\nStart creating reservation.')
-        print('On each step if you would like to quit just type cancel!')
+                if current_position == len(speedtest_text):
+                    is_speed_test_finished = True
+            print_screen(text_for_print, SPEEDTEST_WELCOME_TEXT)
+            all_pressed.append(pressed)
+        end = time.time()
+        return end - start
+
+    def result_from_speedtest(self, time_for_completion, words_per_minute):
+        clear_screen()
+        print(colored('Speed Test completed in ' + "%.2f" % time_for_completion +'s', 'blue').center(os.get_terminal_size().columns))
+        print(colored(f'{words_per_minute}wpm', 'blue').center(os.get_terminal_size().columns))
+        time.sleep(2)
+        # words_in_text = len(speed_test_text.split('_'))
+
+        # words_per_minute = int(round(words_in_text / (end - start) * 60))
+        # clear_screen()
+        # print(colored('Speed Test completed in ' + "%.2f" % (end - start) +'s', 'blue').center(os.get_terminal_size().columns))
+        # print(colored(f'{words_per_minute}wpm', 'blue').center(os.get_terminal_size().columns))
+        # print(words_in_text)

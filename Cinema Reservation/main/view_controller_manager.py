@@ -1,12 +1,12 @@
 from .controllers import UserController, TextController, TutorialController, SpeedTestController
 from .models import User
-from .views import (UserViews, MovieViews, ProjectionViews,
-                   ReservationViews, system_input)
+from .views import (UserViews, TutorialViews, SpeedTestViews, system_input)
 from .urwid_views import Menu
 from views_constants import PROJECTION_SEATS
 from sqlalchemy.exc import IntegrityError
 import re
 from datetime import datetime
+from .utils import calculate_words_per_minute
 
 
 class ViewControllerManager:
@@ -14,14 +14,10 @@ class ViewControllerManager:
         self.user_views = UserViews()
         self.user_controllers = UserController()
         self.text_controllers = TextController()
+        self.tutorial_views = TutorialViews()
         self.tutorial_controllers = TutorialController()
+        self.speedtest_views = SpeedTestViews()
         self.speedtest_controllers = SpeedTestController()
-        # self.movie_views = MovieViews()
-        # self.movie_controllers = MovieController()
-        # self.projection_views = ProjectionViews()
-        # self.projection_controllers = ProjectionController()
-        # self.reservation_views = ReservationViews()
-        # self.reservation_controllers = ReservationController()
 
     def manage_entering_system_views_and_controllers(self):
         user_entered_system = None
@@ -62,16 +58,16 @@ class ViewControllerManager:
         is_playing_finished = False
         while not is_playing_finished:
             tutorial = self.tutorial_controllers.get_tutorial_for_user(user.next_tutorial_order_id)
-            # TODO:
-            # call start_tutorial view instead of print()
-            print(tutorial.content)
+            time_for_completion = self.tutorial_views.process_tutorial(tutorial.content)
+            words_per_minute = calculate_words_per_minute(tutorial.words, time_for_completion)
 
+            self.tutorial_views.result_from_tutorial(time_for_completion, words_per_minute)
             if tutorial.order_id < tutorials_count:
                 self.user_controllers.increment_user_next_tutorial_order_id(user)
             else:
                 self.user_controllers.set_one_as_user_next_tutorial_order_id(user)
-                print('Svurshiha tutorialite')
                 is_playing_finished = True
+        self.tutorial_views.finished_all_tutorials()
 
     def start_speedtest(self, user):
         is_playing_finished = False
@@ -81,7 +77,9 @@ class ViewControllerManager:
             text = self.text_controllers.get_random_text(previous_text_id)
             # TODO:
             # call start_speedtest view instead of print()
-            print(text.content)
+            time_for_completion = self.speedtest_views.process_speedtest(text.content)
+            words_per_minute = calculate_words_per_minute(text.words, time_for_completion)
+            self.speedtest_views.result_from_speedtest(time_for_completion, words_per_minute)
 
             if count > 4: #TODO check if process is canceled by user
                 is_playing_finished = True

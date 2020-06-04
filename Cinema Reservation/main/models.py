@@ -16,6 +16,10 @@ class Tutorial(Base):
     order_id = Column(Integer, unique=True)
     content = Column(Integer, unique=True)
 
+    @property
+    def words(self):
+        return len(self.content.split(' '))
+
 
 class User(Base):
     __tablename__ = 'user'
