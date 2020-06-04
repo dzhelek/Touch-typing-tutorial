@@ -5,6 +5,9 @@ from random import randint
 from re import compile, match
 
 from settings import HASHING_TIMES
+import subprocess
+from getpass import getpass
+from termcolor import colored
 
 
 def get_hashed_pass_and_salt(password):
@@ -51,3 +54,19 @@ def get_datetime_object(date):
 def get_time_object(str_time):
     h, m = str_time.split(':')
     return time(int(h), int(m))
+
+
+def clear_screen():
+    subprocess.call('clear')
+
+
+def system_input(text, secret=False):
+    if secret:
+        inputing = getpass
+    else:
+        inputing = input
+    return inputing(colored('', 'green'))
+
+
+def calculate_words_per_minute(words, time, sep='_'):
+    return int(round(words / time * 60))
