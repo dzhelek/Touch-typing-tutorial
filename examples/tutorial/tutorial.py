@@ -6,11 +6,11 @@ def exit_on_q(key):
         raise urwid.ExitMainLoop()
 
 palette = [
-    ('banner', '', '', '', '#ffa', '#60d'),
-    ('streak', '', '', '', 'g50', '#60a'),
-    ('inside', '', '', '', 'g38', '#808'),
-    ('outside', '', '', '', 'g27', '#a06'),
-    ('bg', '', '', '', 'g7', '#d06'),]
+    ('banner', '', '', '', '#ffa', '#184'),
+    ('streak', '', '', '', 'g50', '#000'),
+    ('inside', '', '', '', 'g38', '#000'),
+   	('outside', '', '', '', 'g27', '#000'),
+    ('bg', '', '', '', 'g7', '#000'),]
 
 placeholder = urwid.SolidFill()
 loop = urwid.MainLoop(placeholder, palette, unhandled_input=exit_on_q)
@@ -21,7 +21,7 @@ loop.widget.original_widget = urwid.Filler(urwid.Pile([]))
 div = urwid.Divider()
 outside = urwid.AttrMap(div, 'outside')
 inside = urwid.AttrMap(div, 'inside')
-txt = urwid.Text(('banner', u" Hello World "), align='center')
+txt = urwid.Text(('banner', u" aa aa aa aa "), align='center')
 streak = urwid.AttrMap(txt, 'streak')
 pile = loop.widget.base_widget
 for item in [outside, inside, streak, inside, outside]:
