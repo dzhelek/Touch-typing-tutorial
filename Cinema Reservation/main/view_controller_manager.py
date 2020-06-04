@@ -2,7 +2,6 @@ from .controllers import UserController, TextController, TutorialController, Spe
 from .models import User
 from .views import (UserViews, TutorialViews, SpeedTestViews, system_input)
 from .urwid_views import Menu
-from views_constants import PROJECTION_SEATS
 from sqlalchemy.exc import IntegrityError
 import re
 from datetime import datetime
