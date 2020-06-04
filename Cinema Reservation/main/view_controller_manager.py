@@ -49,13 +49,38 @@ class ViewControllerManager:
         except ValueError as err:
             self.user_views.error_view(str(err))
 
-    def show_movies(self):
-        all_movies = self.movie_controllers.show_movies()
-        self.movie_views.show_all_view(all_movies)
+    def start_tutorial(self, user):
+        # while not is_correct_data_entered:
+        #     data_entered = system_input(input_message)
+        #     if data_entered == 'cancel':
+        #         raise SystemExit
+        #     try:
+        #         data_for_reservation += int(data_entered)
+        #         is_correct_data_entered = True
+        #     except Exception as e:
+        #         print(error_message)
+        # return data_for_reservation
+        tutorials_count = self.tutorial_controllers.get_tutorials_count()
+        is_playing_finished = False
+        while not is_playing_finished:
+            tutorial = self.tutorial_controllers.get_tutorial_for_user(user.next_tutorial_order_id)
+            print(tutorial.content)
+            #TODO
+            #play tutorial
+            if tutorial.order_id < tutorials_count:
+                self.user_controllers.increment_user_next_tutorial_order_id(user)
+            else:
+                self.user_controllers.set_one_as_user_next_tutorial_order_id(user)
+                print('Svurshiha tutorialite')
+                is_playing_finished = True
 
-    def show_movie_projections(self, movie, date=''):
-        projections = self.projection_controllers.show_projection(movie, date)
-        self.projection_views.show_all_projections(projections)
+    # def show_movies(self):
+    #     all_movies = self.movie_controllers.show_movies()
+    #     self.movie_views.show_all_view(all_movies)
+
+    # def show_movie_projections(self, movie, date=''):
+    #     projections = self.projection_controllers.show_projection(movie, date)
+    #     self.projection_views.show_all_projections(projections)
 
     def read_input_for_reservation(self, input_message, error_message):
         is_correct_data_entered = False

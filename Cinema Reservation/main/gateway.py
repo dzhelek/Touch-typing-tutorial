@@ -19,6 +19,14 @@ class UserGateway:
         self.db.add(User(username=username, email=email, password=password,
                          salt=salt, superuser=True))
 
+    def update_user_next_tutorial_id(self, user_id):
+        self.db.session.query().\
+            filter(User.id == user_id).update({"next_tutorial_order_id": (User.next_tutorial_order_id + 1)})
+        self.db.commit()
+
+    # def select_next_tutorial_id_by_user_id(user_id):
+    #     next_tutorial_id = self.db.session.query(User).filter
+
 
 class TextGateway:
     def __init__(self):
@@ -48,8 +56,15 @@ class TutorialGateway:
     def __init__(self):
         self.db = Database()
 
+    def select_tutorial_by_order_id(self, order_id):
+        order_id = self.db.session.query(Tutorial).filter(Tutorial.order_id == order_id).first()
+        self.db.commit()
+        return order_id
+
     def select_tutorials_count(self):
-        return self.db.session.query(Tutorial.order_id).count()
+        count = self.db.session.query(Tutorial.order_id).count()
+        self.db.commit()
+        return count
 
     def update_table_with_tutorial_data(self, order_id, content):
         self.db.add(Tutorial(order_id=order_id, content=content))

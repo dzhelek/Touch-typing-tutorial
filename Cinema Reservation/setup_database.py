@@ -13,6 +13,8 @@ def setup_database():
     text_controller = TextController()
     text_controller.add_text('First text added')
     tutorial_controller = TutorialController()
+    tutorial_controller.add_tutorial('aa')
+    tutorial_controller.add_tutorial('aa aa')
     tutorial_controller.add_tutorial('aa aa aa')
     # controller = MovieController()
     # controller.add_movie('The Hunger Games: Catching Fire', 7.9)

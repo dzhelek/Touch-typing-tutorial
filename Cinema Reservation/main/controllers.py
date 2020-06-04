@@ -1,5 +1,6 @@
 from .utils import get_hash, get_hashed_pass_and_salt
 from .gateway import UserGateway, TextGateway, SpeedTestGateway, TutorialGateway
+from .models import User
 
 
 class UserController:
@@ -20,6 +21,16 @@ class UserController:
 
     def select_user_by_username(self, username, password):
         return self.gateway.search_user_by_name(username)
+
+    def increment_user_next_tutorial_order_id(self, user):
+        # self.gateway.update_user_next_tutorial_id(user_id)
+        user.next_tutorial_order_id = User.next_tutorial_order_id + 1
+        self.gateway.db.commit()
+
+    def set_one_as_user_next_tutorial_order_id(self, user):
+        user.next_tutorial_order_id = 1
+        self.gateway.db.commit()
+
 
 
 class TextController:
@@ -48,9 +59,12 @@ class TutorialController:
     def get_tutorials_count(self):
         return self.gateway.select_tutorials_count()
 
+    def get_tutorial_for_user(self, tutorial_order_id):
+        return self.gateway.select_tutorial_by_order_id(tutorial_order_id)
+
     def add_tutorial(self, tutorial_content):
         tutorials_count = self.get_tutorials_count()
-        self.gateway.update_table_with_tutorial_data(tutorials_count, tutorial_content)
+        self.gateway.update_table_with_tutorial_data(tutorials_count + 1, tutorial_content)
 
 
 # class MovieController:

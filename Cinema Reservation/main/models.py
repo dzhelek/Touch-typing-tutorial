@@ -25,7 +25,7 @@ class User(Base):
     password = Column(String)
     salt = Column(String)
     superuser = Column(Boolean)
-    next_tutorial_id = Column(Integer, ForeignKey(Tutorial.id))
+    next_tutorial_order_id = Column(Integer, ForeignKey(Tutorial.order_id), default=1)
     tutorial = relationship(Tutorial, backref='users')
 
     def __str__(self):
