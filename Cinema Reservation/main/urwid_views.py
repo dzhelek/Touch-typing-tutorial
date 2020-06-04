@@ -25,5 +25,26 @@ class Menu:
 
         raise urwid.ExitMainLoop()
 
+
+class Confirm:
+    def __init__(self, title):
+        self.title = title
+        self.main = urwid.Padding(self.confirm(), left=2, right=2)
+        top = urwid.Overlay(self.main, urwid.SolidFill(u'\N{MEDIUM SHADE}'),
+                            align='center', width=('relative', 60),
+                            valign='middle', height=('relative', 60),
+                            min_width=20, min_height=9)
+        urwid.MainLoop(top, palette=[('reversed', 'standout', '')]).run()
+
+    def confirm(self):
+        response = urwid.Text(self.title)
+        done = urwid.Button(u'Ok')
+        urwid.connect_signal(done, 'click', self.exit_program)
+        return urwid.Filler(
+            urwid.Pile(
+                [response, urwid.AttrMap(done, None, focus_map='reversed')]
+            )
+        )
+
     def exit_program(self, button):
-        raise SystemExit
+        raise urwid.ExitMainLoop()

@@ -65,7 +65,7 @@ def system_input(text, secret=False):
         inputing = getpass
     else:
         inputing = input
-    return inputing(colored('', 'green'))
+    return inputing(colored(f'{text}: ', 'green'))
 
 
 def calculate_words_per_minute(words, time, sep='_'):
