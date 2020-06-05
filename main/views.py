@@ -85,7 +85,7 @@ show movies''', COMMAND_COLOR))
     def show_best_ten_speedtests(self, speedtests):
         clear_screen()
         print(colored('BEST SCORES\n', 'blue').center(os.get_terminal_size().columns))
-        print('wps  -----  completed on               '.center(os.get_terminal_size().columns))
+        print('wpm  -----  completed on               '.center(os.get_terminal_size().columns))
         speedtests_count = 0
         for speedtest in speedtests:
             print(colored((str(speedtest.words_per_minute) + ' ----- ' + str(speedtest.when)[:19]), 'green')
