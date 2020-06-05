@@ -5,7 +5,8 @@ from .urwid_views import Menu
 from sqlalchemy.exc import IntegrityError
 import re
 from datetime import datetime
-from .utils import calculate_words_per_minute
+from .utils import calculate_words_per_minute, clear_screen
+import time
 
 
 class ViewControllerManager:
@@ -71,55 +72,57 @@ class ViewControllerManager:
         self.tutorial_views.finished_all_tutorials()
 
     def start_speedtest(self, user):
-        is_playing_finished = False
-        count = 0 #TODO remove this count
         previous_text_id = None
-        while not is_playing_finished:
+        while True:
             text = self.text_controllers.get_random_text(previous_text_id)
-            # TODO:
-            # call start_speedtest view instead of print()
             time_for_completion = self.speedtest_views.process_speedtest(text.content)
             words_per_minute = calculate_words_per_minute(text.words, time_for_completion)
             self.speedtest_views.result_from_speedtest(time_for_completion, words_per_minute)
-
-            if count > 4: #TODO check if process is canceled by user
-                is_playing_finished = True
-            else:
-                previous_text_id = text.id
-                count += 1
-            self.speedtest_controllers.add_speedtest(user.id, text.id, text.words / 10 * 60, datetime.now())
+            previous_text_id = text.id
+            self.speedtest_controllers.add_speedtest(user.id, text.id, words_per_minute, datetime.now())
 
     def get_speedtests_with_best_score(self, user_id, count):
         return self.speedtest_controllers.get_speedtests_with_best_score_for_user(user_id, count)
 
-    def read_input_for_reservation(self, input_message, error_message):
-        is_correct_data_entered = False
-        data_for_reservation = 0
-        while not is_correct_data_entered:
-            data_entered = system_input(input_message)
-            if data_entered == 'cancel':
-                raise SystemExit
-            try:
-                data_for_reservation += int(data_entered)
-                is_correct_data_entered = True
-            except Exception as e:
-                print(error_message)
-        return data_for_reservation
+    def generate_user_statistics(self, user):
+        best_speedtests = self.get_speedtests_with_best_score(user.id, 10)
+        self.user_views.show_best_ten_speedtests(best_speedtests)
+        time.sleep(2)
+
+    # def read_input_for_reservation(self, input_message, error_message):
+    #     is_correct_data_entered = False
+    #     data_for_reservation = 0
+    #     while not is_correct_data_entered:
+    #         data_entered = system_input(input_message)
+    #         if data_entered == 'cancel':
+    #             raise SystemExit
+    #         try:
+    #             data_for_reservation += int(data_entered)
+    #             is_correct_data_entered = True
+    #         except Exception as e:
+    #             print(error_message)
+    #     return data_for_reservation
 
     def manage_user_commands_views_and_controllers(self, user):
         menu = Menu(f'welcome, {user.username}',
                     ['tutorial', 'speedtest', 'statistics', 'exit'])
         command = menu.command
-        if command == 'tutorial':
-            pass
-        elif command == 'speedtest':
-            pass
-        elif command == 'statistics':
-            pass
-        elif command == 'exit':
+        if command == 'exit':
+            clear_screen()
             raise SystemExit
-        else:
-            raise ValueError
+        try:
+            if command == 'tutorial':
+                self.start_tutorial(user)
+                raise SystemExit
+            elif command == 'speedtest':
+                self.start_speedtest(user)
+            elif command == 'statistics':
+                self.generate_user_statistics(user)
+                raise SystemExit
+            else:
+                raise ValueError
+        except SystemExit:
+                self.manage_user_commands_views_and_controllers(user)
 
     def manage_signup_view_and_controller(self):
         signup_data = self.user_views.signup()

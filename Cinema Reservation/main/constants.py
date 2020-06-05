@@ -43,3 +43,4 @@ KEYBOARD = '''
 ALL_TUTORIALS_FINISHED_TEXT = 'CONGRATULATIONS, You completed all of the tutorials!'
 TUTORIAL_WELCOME_TEXT = '----- Tutorial -----'
 SPEEDTEST_WELCOME_TEXT = '----- Speed Test -----'
+ESCAPE_KEY_CODE = 27

@@ -9,10 +9,11 @@ from tabulate import tabulate
 from termcolor import colored
 
 from .constants import (LEFT_HAND, KEYBOARD, RIGHT_HAND, ALL_TUTORIALS_FINISHED_TEXT,
-                        TUTORIAL_WELCOME_TEXT, SPEEDTEST_WELCOME_TEXT)
+                        TUTORIAL_WELCOME_TEXT, SPEEDTEST_WELCOME_TEXT, ESCAPE_KEY_CODE)
 import os
 import time
 from .help_library import get_character
+from pynput import keyboard
 
 
 def welcome(welcome_text):
@@ -91,8 +92,40 @@ show movies''', COMMAND_COLOR))
     def exit(self, username='guest'):
         print(colored(f'Goodbye, {username}!', COLOR_IN_EXIT, attrs=['bold']))
 
+    def show_best_ten_speedtests(self, speedtests):
+        clear_screen()
+        print(colored('BEST SCORES\n', 'blue').center(os.get_terminal_size().columns))
+        print('wps ----- completed on               '.center(os.get_terminal_size().columns))
+        speedtests_count = 0
+        for speedtest in speedtests:
+            print(colored((str(speedtest.words_per_minute) + ' ----- ' + str(speedtest.when)[:19]), 'green').\
+                                            center(os.get_terminal_size().columns))
+            speedtests_count += 1
+
+        if speedtests_count == 0:
+            print(colored('You have not completed any speed tests', 'green').center(os.get_terminal_size().columns))
+        pressed = str(get_character())[2]
+        if pressed:
+            raise SystemExit
+
 
 class TutorialViews:
+    # def on_press(key):
+    #     print('{0} pressed'.format(
+    #         key))
+
+    # def on_release(key):
+    #     print('{0} release'.format(
+    #         key))
+    #     if key == Key.esc:
+    #         # Stop listener
+    #         return False
+
+    # # Collect events until released
+    # with keyboard.Listener(
+    #         on_press=on_press,
+    #         on_release=on_release) as listener:
+
     def process_tutorial(self, tutorial_text):
         start = time.time()
         print_screen(tutorial_text, title=TUTORIAL_WELCOME_TEXT)
@@ -101,8 +134,15 @@ class TutorialViews:
         all_pressed = []
         text_for_print = tutorial_text
         while not is_tutorial_finished:
-            pressed = str(get_character())[2]
-            pressed = pressed.lower()
+            pressed = get_character()
+            # if pressed == b'x\\1b':
+            #     print(pressed)
+            #     time.sleep(2)
+            pressed = str(pressed)[2]
+
+            
+            if pressed == '\\':
+                raise SystemExit
             if pressed == tutorial_text[current_position]:
                 current_position += 1
 
@@ -112,7 +152,7 @@ class TutorialViews:
 
                 if current_position == len(tutorial_text):
                     is_tutorial_finished = True
-            print_screen(text_for_print)
+            print_screen(text_for_print, title=TUTORIAL_WELCOME_TEXT)
             all_pressed.append(pressed)
         end = time.time()
         return end - start
@@ -124,7 +164,8 @@ class TutorialViews:
         time.sleep(2)
 
     def finished_all_tutorials(self):
-        print_screen(ALL_TUTORIALS_FINISHED_TEXT)
+        print_screen(ALL_TUTORIALS_FINISHED_TEXT, title=TUTORIAL_WELCOME_TEXT)
+        time.sleep(2)
 
 
 class SpeedTestViews:
@@ -137,6 +178,8 @@ class SpeedTestViews:
         text_for_print = speedtest_text
         while not is_speed_test_finished:
             pressed = str(get_character())[2]
+            if pressed == '\\':
+                raise SystemExit
             if pressed == speedtest_text[current_position]:
                 current_position += 1
 
@@ -156,10 +199,3 @@ class SpeedTestViews:
         print(colored('Speed Test completed in ' + "%.2f" % time_for_completion +'s', 'blue').center(os.get_terminal_size().columns))
         print(colored(f'{words_per_minute}wpm', 'blue').center(os.get_terminal_size().columns))
         time.sleep(2)
-        # words_in_text = len(speed_test_text.split('_'))
-
-        # words_per_minute = int(round(words_in_text / (end - start) * 60))
-        # clear_screen()
-        # print(colored('Speed Test completed in ' + "%.2f" % (end - start) +'s', 'blue').center(os.get_terminal_size().columns))
-        # print(colored(f'{words_per_minute}wpm', 'blue').center(os.get_terminal_size().columns))
-        # print(words_in_text)
