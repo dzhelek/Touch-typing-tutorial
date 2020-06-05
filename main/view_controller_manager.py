@@ -1,6 +1,5 @@
 from .controllers import UserController, TextController, TutorialController, SpeedTestController
-from .models import User
-from .views import (UserViews, TutorialViews, SpeedTestViews, system_input)
+from .views import (UserViews, TutorialViews, SpeedTestViews)
 from .urwid_views import Menu
 from sqlalchemy.exc import IntegrityError
 import re

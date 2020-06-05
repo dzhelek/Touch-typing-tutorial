@@ -1,11 +1,7 @@
 from sqlalchemy import (Column, Integer, String, Boolean,
-                        Float, ForeignKey, DateTime,
-                        CheckConstraint)
+                        Float, ForeignKey, DateTime,)
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-
-from email.utils import parseaddr
-from re import compile, match
 
 Base = declarative_base()
 

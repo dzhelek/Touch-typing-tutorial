@@ -46,10 +46,13 @@ class SpeedTestGateway:
     def __init__(self):
         self.db = Database()
 
-    def update_table_with_speedtest_data(self, user_id, text_id, words_per_minute, when):
-        self.db.add(SpeedTest(user_id=user_id, text_id=text_id, words_per_minute=words_per_minute, when=when))
+    def update_table_with_speedtest_data(self, user_id, text_id,
+                                         words_per_minute, when):
+        self.db.add(SpeedTest(user_id=user_id, text_id=text_id,
+                              words_per_minute=words_per_minute, when=when))
 
-    def select_speedtests_for_user_ordered_by_words_per_minute(self, user_id, count):
+    def select_speedtests_for_user_ordered_by_words_per_minute(self,
+                                                               user_id, count):
         speedtests = self.db.session.query(SpeedTest).filter(SpeedTest.user_id == user_id).\
             order_by(SpeedTest.words_per_minute.desc()).\
             order_by(SpeedTest.when.desc()).limit(count)

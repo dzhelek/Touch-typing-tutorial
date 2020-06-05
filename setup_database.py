@@ -1,5 +1,6 @@
 from main.database import Database
-from main.controllers import (UserController, TextController, TutorialController)
+from main.controllers import (UserController, TextController,
+                              TutorialController)
 from settings import SU_NAME, SU_PASS
 
 
@@ -8,10 +9,12 @@ def setup_database():
     db.create()
 
     user_controller = UserController()
-    user_controller.sign_user(username=SU_NAME, email=None, password=SU_PASS, superuser=True)
+    user_controller.sign_user(username=SU_NAME, email=None,
+                              password=SU_PASS, superuser=True)
     text_controller = TextController()
 
-    text_controller.add_text('So I\'m two inches away from her. Her luscious lips part. \
+    text_controller.add_text('So I\'m two inches away from her. \
+Her luscious lips part. \
 Just as I\'m about to kiss her, she looks at me and she says, \
 "What\'s your name?" Gogol Ganguli. End of seduction 101.')
 

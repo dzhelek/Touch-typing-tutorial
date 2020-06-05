@@ -1,5 +1,6 @@
 from .utils import get_hash, get_hashed_pass_and_salt
-from .gateway import UserGateway, TextGateway, SpeedTestGateway, TutorialGateway
+from .gateway import (UserGateway, TextGateway,
+                      SpeedTestGateway, TutorialGateway)
 from .models import User
 import random
 
@@ -58,7 +59,8 @@ class SpeedTestController:
         self.gateway = SpeedTestGateway()
 
     def add_speedtest(self, user_id, text_id, words_per_minute, when):
-        self.gateway.update_table_with_speedtest_data(user_id, text_id, words_per_minute, when)
+        self.gateway.update_table_with_speedtest_data(user_id, text_id,
+                                                      words_per_minute, when)
 
     def get_speedtests_with_best_score_for_user(self, user_id, count=1):
         return self.gateway.select_speedtests_for_user_ordered_by_words_per_minute(user_id, count)
@@ -76,4 +78,5 @@ class TutorialController:
 
     def add_tutorial(self, tutorial_content):
         tutorials_count = self.get_tutorials_count()
-        self.gateway.update_table_with_tutorial_data(tutorials_count + 1, tutorial_content)
+        self.gateway.update_table_with_tutorial_data(tutorials_count + 1,
+                                                     tutorial_content)

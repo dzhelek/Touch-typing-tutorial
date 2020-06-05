@@ -1,16 +1,11 @@
-from getpass import getpass
-import subprocess
-
-from .models import User
 from views_constants import *
 from .utils import (validate_email, validate_password, clear_screen, system_input,
                     calculate_position_of_finger_in_board_by_symbol)
 
-from tabulate import tabulate
 from termcolor import colored
 
-from .constants import (ALL_TUTORIALS_FINISHED_TEXT, TUTORIAL_WELCOME_TEXT, 
-    SPEEDTEST_WELCOME_TEXT, ESCAPE_KEY_CODE, BOARD)
+from .constants import (ALL_TUTORIALS_FINISHED_TEXT, TUTORIAL_WELCOME_TEXT,
+                        SPEEDTEST_WELCOME_TEXT, BOARD)
 import os
 import time
 from .help_library import get_character
@@ -93,8 +88,8 @@ show movies''', COMMAND_COLOR))
         print('wps  -----  completed on               '.center(os.get_terminal_size().columns))
         speedtests_count = 0
         for speedtest in speedtests:
-            print(colored((str(speedtest.words_per_minute) + ' ----- ' + str(speedtest.when)[:19]), 'green').\
-                                            center(os.get_terminal_size().columns))
+            print(colored((str(speedtest.words_per_minute) + ' ----- ' + str(speedtest.when)[:19]), 'green')
+                  .center(os.get_terminal_size().columns))
             speedtests_count += 1
 
         if speedtests_count == 0:
@@ -136,7 +131,8 @@ class TutorialViews:
 
     def result_from_tutorial(self, time_for_completion, words_per_minute):
         clear_screen()
-        print(colored('Tutorial completed in ' + "%.2f" % time_for_completion +'s', 'blue').center(os.get_terminal_size().columns))
+        print(colored('Tutorial completed in ' + "%.2f" % time_for_completion + 's', 'blue')
+              .center(os.get_terminal_size().columns))
         print(colored(f'{words_per_minute}wpm', 'blue').center(os.get_terminal_size().columns))
         time.sleep(2)
 
@@ -150,7 +146,6 @@ class SpeedTestViews:
         start = time.time()
         current_position = 0
         is_speed_test_finished = False
-        all_pressed = []
         text_for_print = speedtest_text
         while not is_speed_test_finished:
             welcome(SPEEDTEST_WELCOME_TEXT)
@@ -172,6 +167,7 @@ class SpeedTestViews:
 
     def result_from_speedtest(self, time_for_completion, words_per_minute):
         clear_screen()
-        print(colored('Speed Test completed in ' + "%.2f" % time_for_completion +'s', 'blue').center(os.get_terminal_size().columns))
+        print(colored('Speed Test completed in ' + "%.2f" % time_for_completion + 's', 'blue')
+              .center(os.get_terminal_size().columns))
         print(colored(f'{words_per_minute}wpm', 'blue').center(os.get_terminal_size().columns))
         time.sleep(2)
