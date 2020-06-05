@@ -3,6 +3,7 @@ from .utils import (validate_email, validate_password, clear_screen, system_inpu
                     calculate_position_of_finger_in_board_by_symbol)
 
 from termcolor import colored
+from .urwid_views import Confirm
 
 from .constants import (ALL_TUTORIALS_FINISHED_TEXT, TUTORIAL_WELCOME_TEXT,
                         SPEEDTEST_WELCOME_TEXT, BOARD)
@@ -130,11 +131,8 @@ class TutorialViews:
         return end - start
 
     def result_from_tutorial(self, time_for_completion, words_per_minute):
-        clear_screen()
-        print(colored('Tutorial completed in ' + "%.2f" % time_for_completion + 's', 'blue')
-              .center(os.get_terminal_size().columns))
-        print(colored(f'{words_per_minute}wpm', 'blue').center(os.get_terminal_size().columns))
-        time.sleep(2)
+        text = 'Tutorial completed in ' + "%.2f" % time_for_completion + 's:    ' + f'{words_per_minute}wpm'
+        Confirm(text)
 
     def finished_all_tutorials(self):
         print_tutorial_screen(ALL_TUTORIALS_FINISHED_TEXT, title=TUTORIAL_WELCOME_TEXT)
@@ -166,8 +164,5 @@ class SpeedTestViews:
         return end - start
 
     def result_from_speedtest(self, time_for_completion, words_per_minute):
-        clear_screen()
-        print(colored('Speed Test completed in ' + "%.2f" % time_for_completion + 's', 'blue')
-              .center(os.get_terminal_size().columns))
-        print(colored(f'{words_per_minute}wpm', 'blue').center(os.get_terminal_size().columns))
-        time.sleep(2)
+        text = 'Speed Test completed in ' + "%.2f" % time_for_completion + 's:    ' + f'{words_per_minute}wpm'
+        Confirm(text)
