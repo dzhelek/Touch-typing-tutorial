@@ -1,45 +1,3 @@
-RIGHT_HAND = '''
-
-   _.-._
-  | | | |_
-  | | | | |
-  | | | | |
-_ |  '-._ |
-\`\`-.'-._;
- \    '   |
-  \  .`  /
-   |    |
-   |    |
-'''
-
-LEFT_HAND = '''
-
-    _.-._
-  _| | | |
- | | | | |
- | | | | |
- | _.-'  | _
- ;_.-'.-`/`/
- |   '    /
- \  `.  /
-  |    |
-  |    |
-'''
-
-KEYBOARD = '''
-,---,---,---,---,---,---,---,---,---,---,---,---,---,-------,
-|1/2| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0 | + | ' | <-    |
-|---'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-----|
-| ->| | Q | W | E | R | T | Y | U | I | O | P | ] | ^ |     |
-|-----',--',--',--',--',--',--',--',--',--',--',--',--'|    |
-| Caps | A | S | D | F | G | H | J | K | L | \ | [ | * |    |
-|----,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'-,-'---'----|
-|    | < | Z | X | C | V | B | N | M | , | . | - |          |
-|----'-,-',--'--,'---'---'---'---'---'---'-,-'---',--,------|
-| ctrl |  | alt |                          |altgr |  | ctrl |
-'------'  '-----'--------------------------'------'  '------'
-'''
-
 ALL_TUTORIALS_FINISHED_TEXT = 'CONGRATULATIONS, You completed all of the tutorials!'
 TUTORIAL_WELCOME_TEXT = '----- Tutorial -----'
 SPEEDTEST_WELCOME_TEXT = '----- Speed Test -----'
@@ -69,26 +27,4 @@ QWERTY = [['`', '1', '2', '3', '4', '5', '6',
            'M', ',', '.', '/', 'SHIFT'],
           ['', '', '', '', '', ' ']]
 
-# 276)
-#     time.sleep(2)
-#     clear_screen()
-#     print_colored_hand(186)
-#     time.sleep(2)
-#     clear_screen()
-#     print_colored_hand(188)
-#     time.sleep(2)
-#     clear_screen()
-#     print_colored_hand(190)
-#     time.sleep(2)
-#     clear_screen()
-#     print_colored_hand(266)
-#     time.sleep(2)
-#     clear_screen()
-#     print_colored_hand(268)
-#     time.sleep(2)
-#     clear_screen()
-#     print_colored_hand(270)
-#     time.sleep(2)
-#     clear_screen()
-#     print_colored_hand(364)
-MAPPER = {0: 276, 1: 186, 2: 188, 3: 190, 4:560, 5: 51, 6: 266, 7: 268, 8: 270, 9:364}
+MAPPER = {0: 276, 1: 186, 2: 188, 3: 190, 4: 560, 5: 51, 6: 266, 7: 268, 8: 270, 9: 364}

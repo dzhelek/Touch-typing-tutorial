@@ -3,13 +3,14 @@ import subprocess
 
 from .models import User
 from views_constants import *
-from .utils import validate_email, validate_password, clear_screen, system_input, calculate_position_of_finger_in_board_by_symbol
+from .utils import (validate_email, validate_password, clear_screen, system_input,
+                    calculate_position_of_finger_in_board_by_symbol)
 
 from tabulate import tabulate
 from termcolor import colored
 
-from .constants import (LEFT_HAND, KEYBOARD, RIGHT_HAND, ALL_TUTORIALS_FINISHED_TEXT,
-                        TUTORIAL_WELCOME_TEXT, SPEEDTEST_WELCOME_TEXT, ESCAPE_KEY_CODE, BOARD)
+from .constants import (ALL_TUTORIALS_FINISHED_TEXT, TUTORIAL_WELCOME_TEXT, 
+    SPEEDTEST_WELCOME_TEXT, ESCAPE_KEY_CODE, BOARD)
 import os
 import time
 from .help_library import get_character
@@ -21,31 +22,16 @@ def welcome(welcome_text):
     print('\n\n')
 
 
-# def print_hands_with_console():
-#     strings = [LEFT_HAND, KEYBOARD, RIGHT_HAND]
-#     print(*['    '.join(x).center(os.get_terminal_size().columns) for x in zip(*[[x.ljust(len(max(s.split('\n'), key=len))) for x in s.split('\n')] for s in strings])], sep='\n')
-
 def print_colored_hand(pos):
     pos = int(pos)
-    # print(BOARD[:pos] + colored(BOARD[pos:pos+3], 'green') + BOARD[pos+3:pos+80] + colored(BOARD[pos+80] + 'X' + BOARD[pos+82], 'green') + BOARD[pos+83:pos+160] + colored(BOARD[pos+160:pos+164], 'green') + BOARD[pos+164:])
-    # print(BOARD[:pos] + colored(BOARD[pos:pos+3], 'green') + BOARD[pos+3:pos+80] + colored(BOARD[pos+80] + 'X' + BOARD[pos+82], 'green') + BOARD[pos+83:])
     board = BOARD[:pos] + colored(BOARD[pos] + 'X' + BOARD[pos + 2], 'green') + BOARD[pos + 3:]
     print(board)
-    # for line in wrap(BOARD, width=91):
-    #     print(line.center(os.get_terminal_size().columns))
-    # 91 i 12
-    # pos = 0
-    # for i in range(12):
-    #     print(board[pos:pos+91].center(os.get_terminal_size().columns))
-    #     pos += 91
-    # for line in textwrap.wrap(board):
-    #     print(line.center(80))
+
 
 def print_tutorial_screen(text, title, pos=0):
     welcome(title)
     print(text.center(80))
     print('\n\n')
-    # print_hands_with_console()
     print_colored_hand(pos)
 
 
@@ -53,12 +39,6 @@ class UserViews:
     def console_read_command_view(self):
         command = input('> ')
         return command
-
-#     def guest_user_help_view(self):
-#         print('\nlist of commands:\n')
-#         print(colored('exit\nhelp\n', COLOR_IN_EXIT))
-#         print(colored('''login
-# signup''', COMMAND_COLOR))
 
     def error_view(self, error):
         print(error)
@@ -110,7 +90,7 @@ show movies''', COMMAND_COLOR))
     def show_best_ten_speedtests(self, speedtests):
         clear_screen()
         print(colored('BEST SCORES\n', 'blue').center(os.get_terminal_size().columns))
-        print('wps ----- completed on               '.center(os.get_terminal_size().columns))
+        print('wps  -----  completed on               '.center(os.get_terminal_size().columns))
         speedtests_count = 0
         for speedtest in speedtests:
             print(colored((str(speedtest.words_per_minute) + ' ----- ' + str(speedtest.when)[:19]), 'green').\
@@ -128,7 +108,6 @@ class TutorialViews:
     def process_tutorial(self, tutorial_text):
         txt = tutorial_text
         start = time.time()
-        # print_screen(tutorial_text, title=TUTORIAL_WELCOME_TEXT)
         current_position = 0
         is_tutorial_finished = False
         all_pressed = []
@@ -169,12 +148,13 @@ class TutorialViews:
 class SpeedTestViews:
     def process_speedtest(self, speedtest_text):
         start = time.time()
-        print_tutorial_screen(speedtest_text, SPEEDTEST_WELCOME_TEXT)
         current_position = 0
         is_speed_test_finished = False
         all_pressed = []
         text_for_print = speedtest_text
         while not is_speed_test_finished:
+            welcome(SPEEDTEST_WELCOME_TEXT)
+            print(text_for_print.center(80))
             pressed = str(get_character())[2]
             if pressed == '\\':
                 raise SystemExit
@@ -187,8 +167,6 @@ class SpeedTestViews:
 
                 if current_position == len(speedtest_text):
                     is_speed_test_finished = True
-            print_tutorial_screen(text_for_print, SPEEDTEST_WELCOME_TEXT)
-            all_pressed.append(pressed)
         end = time.time()
         return end - start
 

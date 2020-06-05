@@ -46,16 +46,6 @@ class ViewControllerManager:
                 self.user_views.error_view(str(err))
 
     def start_tutorial(self, user):
-        # while not is_correct_data_entered:
-        #     data_entered = system_input(input_message)
-        #     if data_entered == 'cancel':
-        #         raise SystemExit
-        #     try:
-        #         data_for_reservation += int(data_entered)
-        #         is_correct_data_entered = True
-        #     except Exception as e:
-        #         print(error_message)
-        # return data_for_reservation
         tutorials_count = self.tutorial_controllers.get_tutorials_count()
         is_playing_finished = False
         while not is_playing_finished:
@@ -89,23 +79,8 @@ class ViewControllerManager:
         self.user_views.show_best_ten_speedtests(best_speedtests)
         time.sleep(2)
 
-    # def read_input_for_reservation(self, input_message, error_message):
-    #     is_correct_data_entered = False
-    #     data_for_reservation = 0
-    #     while not is_correct_data_entered:
-    #         data_entered = system_input(input_message)
-    #         if data_entered == 'cancel':
-    #             raise SystemExit
-    #         try:
-    #             data_for_reservation += int(data_entered)
-    #             is_correct_data_entered = True
-    #         except Exception as e:
-    #             print(error_message)
-    #     return data_for_reservation
-
     def manage_user_commands_views_and_controllers(self, user):
-        menu = Menu(f'welcome, {user.username}',
-                    ['tutorial', 'speedtest', 'statistics', 'exit'])
+        menu = Menu(f'welcome, {user.username}', ['tutorial', 'speedtest', 'statistics', 'exit'])
         command = menu.command
         if command == 'exit':
             clear_screen()
@@ -122,7 +97,7 @@ class ViewControllerManager:
             else:
                 raise ValueError
         except SystemExit:
-                self.manage_user_commands_views_and_controllers(user)
+            self.manage_user_commands_views_and_controllers(user)
 
     def manage_signup_view_and_controller(self):
         signup_data = self.user_views.signup()

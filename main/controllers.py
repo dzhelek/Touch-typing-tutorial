@@ -24,7 +24,6 @@ class UserController:
         return self.gateway.search_user_by_name(username)
 
     def increment_user_next_tutorial_order_id(self, user):
-        # self.gateway.update_user_next_tutorial_id(user_id)
         user.next_tutorial_order_id = User.next_tutorial_order_id + 1
         self.gateway.db.commit()
 
@@ -78,34 +77,3 @@ class TutorialController:
     def add_tutorial(self, tutorial_content):
         tutorials_count = self.get_tutorials_count()
         self.gateway.update_table_with_tutorial_data(tutorials_count + 1, tutorial_content)
-
-
-# class MovieController:
-#     def __init__(self):
-#         self.gateway = MovieGateway()
-
-#     def show_movies(self):
-#         return self.gateway.select_all_movies()
-
-#     def add_movie(self, name, rating):
-#         self.gateway.update_table_with_movie_data(name, rating)
-
-
-# class ProjectionController:
-#     def __init__(self):
-#         self.gateway = ProjectionGateway()
-
-#     def show_projection(self, movie, date):
-#         return self.gateway.select_projections_for_given_movie_and_date(movie, date)
-
-#     def add_projection(self, movie, p_type, date, time):
-#         self.gateway.update_table_with_projection_data(movie, p_type,
-#                                                        date, time)
-
-
-# class ReservationController:
-#     def __init__(self):
-#         self.gateway = ReservationGateway()
-
-#     def count_used_seats(self, projection_id):
-#         return self.gateway.count_reservations_with_projection_id(projection_id)
