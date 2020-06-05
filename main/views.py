@@ -90,7 +90,7 @@ show movies''', COMMAND_COLOR))
     def show_best_ten_speedtests(self, speedtests):
         clear_screen()
         print(colored('BEST SCORES\n', 'blue').center(os.get_terminal_size().columns))
-        print('wps ----- completed on               '.center(os.get_terminal_size().columns))
+        print('wps  -----  completed on               '.center(os.get_terminal_size().columns))
         speedtests_count = 0
         for speedtest in speedtests:
             print(colored((str(speedtest.words_per_minute) + ' ----- ' + str(speedtest.when)[:19]), 'green').\
@@ -148,12 +148,13 @@ class TutorialViews:
 class SpeedTestViews:
     def process_speedtest(self, speedtest_text):
         start = time.time()
-        print_tutorial_screen(speedtest_text, SPEEDTEST_WELCOME_TEXT)
         current_position = 0
         is_speed_test_finished = False
         all_pressed = []
         text_for_print = speedtest_text
         while not is_speed_test_finished:
+            welcome(SPEEDTEST_WELCOME_TEXT)
+            print(text_for_print.center(80))
             pressed = str(get_character())[2]
             if pressed == '\\':
                 raise SystemExit
@@ -166,8 +167,6 @@ class SpeedTestViews:
 
                 if current_position == len(speedtest_text):
                     is_speed_test_finished = True
-            print_tutorial_screen(text_for_print, SPEEDTEST_WELCOME_TEXT)
-            all_pressed.append(pressed)
         end = time.time()
         return end - start
 

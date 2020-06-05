@@ -15,7 +15,6 @@ def setup_database():
     text_controller.add_text('Third text added')
     text_controller.add_text('Fourth text added')
     text_controller.add_text('Fifth text added')
-    text_controller.add_text('a')
     tutorial_controller = TutorialController()
     tutorial_controller.add_tutorial('aa ss dd ff jj kk ll ;;')
     tutorial_controller.add_tutorial('as as df df jk jk l; l;')
