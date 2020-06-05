@@ -8,6 +8,7 @@ from settings import HASHING_TIMES
 import subprocess
 from getpass import getpass
 from termcolor import colored
+from .constants import QWERTY, MAPPER
 
 
 def get_hashed_pass_and_salt(password):
@@ -70,3 +71,10 @@ def system_input(text, secret=False):
 
 def calculate_words_per_minute(words, time, sep='_'):
     return int(round(words / time * 60))
+
+
+def calculate_position_of_finger_in_board_by_symbol(symbol):
+    symbol = symbol.upper()
+    for row in QWERTY:
+        if row.__contains__(symbol):
+            return MAPPER[row.index(symbol) - 1]

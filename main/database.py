@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from main.models import User, Text, SpeedTest, Base
+from main.models import Base
 from settings import DB_NAME
 
 
