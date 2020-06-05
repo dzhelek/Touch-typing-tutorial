@@ -18,9 +18,12 @@ def setup_database():
     text_controller.add_text('Fifth text added')
     text_controller.add_text('a')
     tutorial_controller = TutorialController()
+    tutorial_controller.add_tutorial('jj jj')
     tutorial_controller.add_tutorial('aa')
-    tutorial_controller.add_tutorial('aa aa')
+    tutorial_controller.add_tutorial('aw aa')
     tutorial_controller.add_tutorial('aa aa aa')
+
+
     # controller = MovieController()
     # controller.add_movie('The Hunger Games: Catching Fire', 7.9)
     # controller.add_movie('Wreck-It Ralph', 7.8)

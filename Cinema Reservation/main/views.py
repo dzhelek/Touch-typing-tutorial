@@ -3,13 +3,13 @@ import subprocess
 
 from .models import User
 from views_constants import *
-from .utils import validate_email, validate_password, clear_screen, system_input
+from .utils import validate_email, validate_password, clear_screen, system_input, calculate_position_of_finger_in_board_by_symbol
 
 from tabulate import tabulate
 from termcolor import colored
 
 from .constants import (LEFT_HAND, KEYBOARD, RIGHT_HAND, ALL_TUTORIALS_FINISHED_TEXT,
-                        TUTORIAL_WELCOME_TEXT, SPEEDTEST_WELCOME_TEXT, ESCAPE_KEY_CODE)
+                        TUTORIAL_WELCOME_TEXT, SPEEDTEST_WELCOME_TEXT, ESCAPE_KEY_CODE, BOARD)
 import os
 import time
 from .help_library import get_character
@@ -17,20 +17,36 @@ from .help_library import get_character
 
 def welcome(welcome_text):
     clear_screen()
-    print(colored(welcome_text.center(os.get_terminal_size().columns), 'blue'))
+    print('                               ' + colored(welcome_text, 'blue'))
     print('\n\n')
 
 
-def print_hands_with_console():
-    strings = [LEFT_HAND, KEYBOARD, RIGHT_HAND]
-    print(*['    '.join(x).center(os.get_terminal_size().columns) for x in zip(*[[x.ljust(len(max(s.split('\n'), key=len))) for x in s.split('\n')] for s in strings])], sep='\n')
+# def print_hands_with_console():
+#     strings = [LEFT_HAND, KEYBOARD, RIGHT_HAND]
+#     print(*['    '.join(x).center(os.get_terminal_size().columns) for x in zip(*[[x.ljust(len(max(s.split('\n'), key=len))) for x in s.split('\n')] for s in strings])], sep='\n')
 
+def print_colored_hand(pos):
+    pos = int(pos)
+    # print(BOARD[:pos] + colored(BOARD[pos:pos+3], 'green') + BOARD[pos+3:pos+80] + colored(BOARD[pos+80] + 'X' + BOARD[pos+82], 'green') + BOARD[pos+83:pos+160] + colored(BOARD[pos+160:pos+164], 'green') + BOARD[pos+164:])
+    # print(BOARD[:pos] + colored(BOARD[pos:pos+3], 'green') + BOARD[pos+3:pos+80] + colored(BOARD[pos+80] + 'X' + BOARD[pos+82], 'green') + BOARD[pos+83:])
+    board = BOARD[:pos] + colored(BOARD[pos] + 'X' + BOARD[pos + 2], 'green') + BOARD[pos + 3:]
+    print(board)
+    # for line in wrap(BOARD, width=91):
+    #     print(line.center(os.get_terminal_size().columns))
+    # 91 i 12
+    # pos = 0
+    # for i in range(12):
+    #     print(board[pos:pos+91].center(os.get_terminal_size().columns))
+    #     pos += 91
+    # for line in textwrap.wrap(board):
+    #     print(line.center(80))
 
-def print_screen(text, title):
+def print_tutorial_screen(text, title, pos=0):
     welcome(title)
-    print(text.center(os.get_terminal_size().columns))
+    print(text.center(80))
     print('\n\n')
-    print_hands_with_console()
+    # print_hands_with_console()
+    print_colored_hand(pos)
 
 
 class UserViews:
@@ -109,37 +125,20 @@ show movies''', COMMAND_COLOR))
 
 
 class TutorialViews:
-    # def on_press(key):
-    #     print('{0} pressed'.format(
-    #         key))
-
-    # def on_release(key):
-    #     print('{0} release'.format(
-    #         key))
-    #     if key == Key.esc:
-    #         # Stop listener
-    #         return False
-
-    # # Collect events until released
-    # with keyboard.Listener(
-    #         on_press=on_press,
-    #         on_release=on_release) as listener:
-
     def process_tutorial(self, tutorial_text):
+        txt = tutorial_text
         start = time.time()
-        print_screen(tutorial_text, title=TUTORIAL_WELCOME_TEXT)
+        # print_screen(tutorial_text, title=TUTORIAL_WELCOME_TEXT)
         current_position = 0
         is_tutorial_finished = False
         all_pressed = []
         text_for_print = tutorial_text
         while not is_tutorial_finished:
+            pos = calculate_position_of_finger_in_board_by_symbol(txt[current_position])
+            print_tutorial_screen(text_for_print, TUTORIAL_WELCOME_TEXT, pos)
             pressed = get_character()
-            # if pressed == b'x\\1b':
-            #     print(pressed)
-            #     time.sleep(2)
             pressed = str(pressed)[2]
 
-            
             if pressed == '\\':
                 raise SystemExit
             if pressed == tutorial_text[current_position]:
@@ -151,7 +150,7 @@ class TutorialViews:
 
                 if current_position == len(tutorial_text):
                     is_tutorial_finished = True
-            print_screen(text_for_print, title=TUTORIAL_WELCOME_TEXT)
+
             all_pressed.append(pressed)
         end = time.time()
         return end - start
@@ -163,14 +162,14 @@ class TutorialViews:
         time.sleep(2)
 
     def finished_all_tutorials(self):
-        print_screen(ALL_TUTORIALS_FINISHED_TEXT, title=TUTORIAL_WELCOME_TEXT)
+        print_tutorial_screen(ALL_TUTORIALS_FINISHED_TEXT, title=TUTORIAL_WELCOME_TEXT)
         time.sleep(2)
 
 
 class SpeedTestViews:
     def process_speedtest(self, speedtest_text):
         start = time.time()
-        print_screen(speedtest_text, SPEEDTEST_WELCOME_TEXT)
+        print_tutorial_screen(speedtest_text, SPEEDTEST_WELCOME_TEXT)
         current_position = 0
         is_speed_test_finished = False
         all_pressed = []
@@ -188,7 +187,7 @@ class SpeedTestViews:
 
                 if current_position == len(speedtest_text):
                     is_speed_test_finished = True
-            print_screen(text_for_print, SPEEDTEST_WELCOME_TEXT)
+            print_tutorial_screen(text_for_print, SPEEDTEST_WELCOME_TEXT)
             all_pressed.append(pressed)
         end = time.time()
         return end - start
