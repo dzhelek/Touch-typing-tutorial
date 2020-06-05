@@ -17,10 +17,15 @@ def setup_database():
     text_controller.add_text('Fifth text added')
     text_controller.add_text('a')
     tutorial_controller = TutorialController()
-    tutorial_controller.add_tutorial('jj jj')
-    tutorial_controller.add_tutorial('aa')
-    tutorial_controller.add_tutorial('aw aa')
-    tutorial_controller.add_tutorial('aa aa aa')
+    tutorial_controller.add_tutorial('aa ss dd ff jj kk ll ;;')
+    tutorial_controller.add_tutorial('as as df df jk jk l; l;')
+    tutorial_controller.add_tutorial('asdf asdf jkl; jkl;')
+    tutorial_controller.add_tutorial('fdsa fdsa ;lkj ;lkj')
+    tutorial_controller.add_tutorial('jkl; jkl; asdf asdf')
+    tutorial_controller.add_tutorial(';lkj ;lkj fdsa fdsa')
+    tutorial_controller.add_tutorial('ee ii ee ii')
+    tutorial_controller.add_tutorial('ei ei ie ie')
+    tutorial_controller.add_tutorial('fefe fefe efef efef')
 
 
 if __name__ == '__main__':
