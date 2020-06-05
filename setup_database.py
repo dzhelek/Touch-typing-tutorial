@@ -10,11 +10,14 @@ def setup_database():
     user_controller = UserController()
     user_controller.sign_user(username=SU_NAME, email=None, password=SU_PASS, superuser=True)
     text_controller = TextController()
-    text_controller.add_text('First text added')
-    text_controller.add_text('Second text added')
-    text_controller.add_text('Third text added')
-    text_controller.add_text('Fourth text added')
-    text_controller.add_text('Fifth text added')
+
+    text_controller.add_text('So I\'m two inches away from her. Her luscious lips part. \
+Just as I\'m about to kiss her, she looks at me and she says, \
+"What\'s your name?" Gogol Ganguli. End of seduction 101.')
+
+    text_controller.add_text('Speed test text to complete')
+    text_controller.add_text('Another speed test for you!')
+
     tutorial_controller = TutorialController()
     tutorial_controller.add_tutorial('aa ss dd ff jj kk ll ;;')
     tutorial_controller.add_tutorial('as as df df jk jk l; l;')
