@@ -13,7 +13,6 @@ from .constants import (LEFT_HAND, KEYBOARD, RIGHT_HAND, ALL_TUTORIALS_FINISHED_
 import os
 import time
 from .help_library import get_character
-from pynput import keyboard
 
 
 def welcome(welcome_text):
